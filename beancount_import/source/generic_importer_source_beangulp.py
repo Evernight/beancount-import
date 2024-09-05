@@ -49,7 +49,6 @@ class ImporterSource(DescriptionBasedSource):
                  glob(os.path.join(directory, '**', '*'), recursive=True)
                            )
         ]
-        print('files', files)
         # filter the valid files for this importer
         self.files = [f for f in files if self.importer.identify(f)]
 
@@ -120,11 +119,9 @@ class ImporterSource(DescriptionBasedSource):
         if not isinstance(entry, Transaction):
             raise ValueError("currently, ImporterSource only supports Transaction and Balance Directive. Got entry {}".format(entry))
         source_posting = self._get_source_posting(entry)
-        if source_posting is None:
-            raise ValueError("entry {} has no postings for account: {}".format(entry, self.account))
         return (self.account,
                 entry.date,
-                source_posting.units,
+                source_posting.units if source_posting else None,
                 entry.narration)
 
     def _make_import_result(self, imported_entry:Directive):
