@@ -113,28 +113,29 @@ class BundleFrontendCommand(setuptools.command.build_py.build_py):
             self.skip_rebuild = False
 
     def run(self):
-        if self.skip_rebuild:
-            bundle_path = os.path.join(frontend_dist_dir, 'app.js')
-            if os.path.exists(bundle_path):
-                print('Skipping rebuild of frontend bundle since %s already exists' % (bundle_path, ))
-                return
+        return
+        #if self.skip_rebuild:
+        #    bundle_path = os.path.join(frontend_dist_dir, 'app.js')
+        #    if os.path.exists(bundle_path):
+        #        print('Skipping rebuild of frontend bundle since %s already exists' % (bundle_path, ))
+        #        return
 
-        target = {"min": "build", "dev": "builddev"}
+        #target = {"min": "build", "dev": "builddev"}
 
-        try:
-            t = target[self.bundle_type]
-            node_modules_path = os.path.join(frontend_dir, 'node_modules')
-            if (self.skip_npm_reinstall and os.path.exists(node_modules_path)):
-                print('Skipping `npm install` since %s already exists' %
-                      (node_modules_path, ))
-            else:
-                subprocess.call('npm i', shell=True, cwd=frontend_dir)
-            res = subprocess.call('npm run %s' % t, shell=True, cwd=frontend_dir)
-        except:
-            raise RuntimeError('Could not run \'npm run %s\'.' % t)
+        #try:
+        #    t = target[self.bundle_type]
+        #    node_modules_path = os.path.join(frontend_dir, 'node_modules')
+        #    if (self.skip_npm_reinstall and os.path.exists(node_modules_path)):
+        #        print('Skipping `npm install` since %s already exists' %
+        #              (node_modules_path, ))
+        #    else:
+        #        subprocess.call('npm i', shell=True, cwd=frontend_dir)
+        #    res = subprocess.call('npm run %s' % t, shell=True, cwd=frontend_dir)
+        #except:
+        #    raise RuntimeError('Could not run \'npm run %s\'.' % t)
 
-        if res != 0:
-            raise RuntimeError('failed to build frontend bundles')
+        #if res != 0:
+        #    raise RuntimeError('failed to build frontend bundles')
 
 
 setuptools.setup(
