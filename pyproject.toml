@@ -4,3 +4,5 @@ requires = [
     "wheel",
     "setuptools_scm>=5.0.2",
 ]
+
+[tool.setuptools_scm]
