@@ -1,5 +1,6 @@
 import collections
 import datetime
+import logging
 import re
 from typing import List, Optional, Union, Callable, Dict, Mapping, Tuple, Any, Iterable, Set, NamedTuple
 import argparse
@@ -24,6 +25,8 @@ from .posting_date import get_posting_date
 from .thread_helpers import call_in_new_thread
 
 from .matching import FIXME_ACCOUNT, is_unknown_account, CLEARED_KEY
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)-8s: %(message)s')
 
 display_prediction_explanation = False
 
@@ -517,6 +520,7 @@ class LoadedReconciler(object):
         all_source_results = []  # type: List[SourceResults]
         for source in self.sources:
             source_results = SourceResults()
+            logging.info(f'preparing source {source.name}')
             source.prepare(self.editor, source_results)
             for account in source_results.accounts:
                 self.account_source_map[account] = source

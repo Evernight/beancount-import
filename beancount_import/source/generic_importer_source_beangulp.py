@@ -12,6 +12,7 @@ changed manually
 Author: Sufiyan Adhikari(github.com/dumbPy)
 """
 
+import logging
 import os
 from glob import glob
 from collections import OrderedDict
@@ -59,9 +60,11 @@ class ImporterSource(DescriptionBasedSource):
     def prepare(self, journal: 'JournalEditor', results: SourceResults) -> None:
         results.add_account(self.account)
 
+        logging.info(f"prepare for {self.name}")
         entries = OrderedDict() #type: Dict[Hashable, List[Directive]]
         for f in self.files:
             f_entries = self.importer.extract(f, existing_entries=journal.entries)
+            logging.info(f'from {f.name} extracted {len(f_entries)} entries')
             # filter statements that are not supported
             f_entries = filter(lambda e: isinstance(e, Transaction) or isinstance(e, Balance), f_entries)
             # collect  all entries in current statement, grouped by hash
