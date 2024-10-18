@@ -64,7 +64,7 @@ class ImporterSource(DescriptionBasedSource):
         entries = OrderedDict() #type: Dict[Hashable, List[Directive]]
         for f in self.files:
             f_entries = self.importer.extract(f, existing_entries=journal.entries)
-            logging.info(f'from {f.name} extracted {len(f_entries)} entries')
+            logging.info(f'from {f} extracted {len(f_entries)} entries')
             # collect  all entries in current statement, grouped by hash
             hashed_entries = OrderedDict() #type: Dict[Hashable, Directive]
             for entry in f_entries:
