@@ -22,8 +22,7 @@ from typing import Hashable, List, Dict, Optional
 from beancount.core.data import Balance, Transaction, Posting,  Directive
 from beancount.core.amount import Amount
 from beancount.core.convert import get_weight
-from beancount.ingest.importer import ImporterProtocol
-from beancount.ingest.cache import get_file
+from beangulp.importers.csvbase import Importer as BeangulpImporter
 from beancount.parser.booking_full import convert_costspec_to_cost
 
 from ..matching import FIXME_ACCOUNT, SimpleInventory
@@ -37,14 +36,14 @@ class ImporterSource(DescriptionBasedSource):
     def __init__(self,
                  directory: str,
                  account: str,
-                 importer: ImporterProtocol,
+                 importer: BeangulpImporter,
                  **kwargs) -> None:
         super().__init__(**kwargs)
         self.directory = os.path.expanduser(directory)
         self.importer = importer
         self.account = account
 
-        # get _FileMemo object for each file
+        # get file names for extraction (note difference from generic_importer_source.py)
         files = [os.path.abspath(f) for f in
                     filter(os.path.isfile,
                  glob(os.path.join(directory, '**', '*'), recursive=True)
@@ -64,7 +63,7 @@ class ImporterSource(DescriptionBasedSource):
         entries = OrderedDict() #type: Dict[Hashable, List[Directive]]
         for f in self.files:
             f_entries = self.importer.extract(f, existing_entries=journal.entries)
-            logging.info(f'from {f.name} extracted {len(f_entries)} entries')
+            logging.info(f'from {f} extracted {len(f_entries)} entries')
             # filter statements that are not supported
             f_entries = filter(lambda e: isinstance(e, Transaction) or isinstance(e, Balance), f_entries)
             # collect  all entries in current statement, grouped by hash
