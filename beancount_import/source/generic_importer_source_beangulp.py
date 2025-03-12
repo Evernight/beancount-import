@@ -49,8 +49,10 @@ class ImporterSource(DescriptionBasedSource):
                  glob(os.path.join(directory, '**', '*'), recursive=True)
                            )
         ]
+        logging.info('all files found: ' + ', '.join(files) + f' ({len(files)})')
         # filter the valid files for this importer
         self.files = [f for f in files if self.importer.identify(f)]
+        logging.info('filtered files: ' + ', '.join(self.files) + f' ({len(self.files)})')
 
     @property
     def name(self) -> str:
